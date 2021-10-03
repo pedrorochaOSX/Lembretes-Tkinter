@@ -24,11 +24,7 @@ class App:
             with open('textoLembretes.txt', 'w+') as arquivo:
                 arquivo.writelines('')
 
-        def adicionar_lembrete(self, data: str, info: int):
-            novoLembrete = Lembrete(data, info)
-            self.lista.append(novoLembrete)
-
-           
+                  
 
         self.textEntry = Entry(window, font='arial 14', fg='white', bg='#24292e',bd=0)
         self.textEntry.place(height=30, width=880, x=10, y=860)
@@ -62,6 +58,10 @@ class App:
 
         self.botaoEscolhido = 'nada'
 
+    def adicionar_lembrete(self, data: str, info: int):
+            novoLembrete = Lembrete(data, info)
+            self.lista.append(novoLembrete)    
+
     def changeOnHover(self, button, colorOnHover, colorOnLeave):
         button.bind("<Enter>", func=lambda e: button.config(background=colorOnHover))
         button.bind("<Leave>", func=lambda e: button.config(background=colorOnLeave))    
@@ -79,11 +79,74 @@ class App:
             self.changeOnHover(self.botaoEscolhido, '#24292e', 'white')
             
             self.textEntry.delete(0,END)
-            print(button_press)
             self.textEntry.insert(END,button_press)
             self.botaoAntigo.config(fg='white',background='#121212')
             self.changeOnHover(self.botaoAntigo, '#24292e', '#121212')
             window.update()
+
+    def adicionar(self):
+        if (self.textEntry.get().strip() != ''):
+            self.info = self.textEntry.get()
+            data = getNTPTimeLocal()
+
+            self.adicionar_lembrete(data, self.info)
+            print(f'''
+    LEMBRETE ADICIONADO: {self.lista[-1]}''')
+            self.quantidade += 1
+            
+            aux = 0
+
+            for i in range(0, self.quantidade-1, 1):
+                aux = self.lista[i+1]
+                self.lista[i+1] = self.lista[0]
+                self.lista[0] = aux
+
+            self.textEntry.delete(0,END)        
+
+            with open('textoLembretes.txt', 'w') as arquivo:
+                for i in self.lista:
+                    arquivo.writelines("%s\n" % i)   
+
+            if (self.quantidade >= 0):
+                posicaoBotao = 80
+        
+            for n in range(0,self.quantidade,1):
+                i = self.lista[n]
+                
+                self.botaoLembrete.append('')
+                self.botaoLembrete[n] = Button(window, text=(f'  {i}'),anchor='w', background='#121212', font='arial 14', fg='white',bd=0, 
+                command=lambda m=n: self.escolherBotao(m))
+                self.botaoLembrete[n].place(height=30, width=900, x=0, y=posicaoBotao)
+                posicaoBotao += 30
+                self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212')
+
+    def editar(self):
+        self.textEntry.insert(END, '3')
+
+    def excluir(self):
+        self.textEntry.insert(END, '4')
+
+    def limpar(self):
+        repetir = 1
+        while (repetir == 1):
+            os.system('cls')
+
+            self.lista.clear()
+            self.quantidade = 0
+            print('''LISTA LIMPA''')
+            with open('textoLembretes.txt', 'w') as arquivo:
+                for i in self.lista:
+                    arquivo.writelines("%s\n" % i)  
+
+            for n in range(0,self.quantidade,1):
+                i = self.lista[n]
+                
+                self.botaoLembrete.append('')
+                self.botaoLembrete[n] = Button(window, text=(f'  {i}'),anchor='w', background='#121212', font='arial 14', fg='white',bd=0, 
+                command=lambda m=n: self.escolherBotao(m))
+                self.botaoLembrete[n].place(height=30, width=900, x=0, y=posicaoBotao)
+                posicaoBotao += 30
+                self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212')          
         
     def Start(self):   
         if (self.quantidade >= 1):
@@ -98,51 +161,7 @@ class App:
             self.botaoLembrete[n].place(height=30, width=900, x=0, y=posicaoBotao)
             posicaoBotao += 30
             self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212') 
-
-    def adicionar(self):
-        self.info = self.textEntry.get("1.0",'end-1c')
-        data = getNTPTimeLocal()
-
-        self.adicionar_lembrete(data, info)
-        print(f'''
-LEMBRETE ADICIONADO: {self.lista[-1]}''')
-        quantidade += 1
-        
-        aux = 0
-
-        for i in range(0, self.quantidade, 1):
-            aux = self.lista[i+1]
-            self.lista[i+1] = self.lista[0]
-            self.lista[0] = aux
-
-        if (self.quantidade >= 1):
-            for n in enumerate(self.lista):
-                print(*n, sep=' ')
-
-        with open('textoLembretes.txt', 'w') as arquivo:
-            for i in self.lista:
-                arquivo.writelines("%s\n" % i)   
-
-        for n in range(0,self.quantidade,1):
-            i = self.lista[n]
     
-            self.botaoLembrete.append('')
-            self.botaoLembrete[n] = Button(window, text=(f'  {i}'),anchor='w', background='#121212', font='arial 12', fg='#ffffff',bd=0, 
-            command=lambda m=n: self.which_button(m))
-            self.botaoLembrete[n].place(height=30, width=600, x=0, y=posicaoBotao)
-            posicaoBotao += 30
-            self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212')         
-
-
-    def editar(self):
-        self.textEntry.insert(END, '3')
-
-    def excluir(self):
-        self.textEntry.insert(END, '4')
-
-    def limpar(self):
-        self.textEntry.insert(END, '5')
-
 window = Tk()
 window.title('Lembretes')
 window.configure(background='#121212')
