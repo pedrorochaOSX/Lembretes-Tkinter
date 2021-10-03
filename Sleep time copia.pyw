@@ -84,6 +84,9 @@ class App:
             self.Start()
 
     def editar(self):
+        for n in range(0,self.quantidade,1):
+            self.botaoLembrete[n].destroy()
+
         if (self.quantidade >= 0):
             posicaoBotao = 80
 
@@ -96,6 +99,7 @@ class App:
                 self.botaoLembrete[n].place(height=30, width=900, x=0, y=posicaoBotao)
                 posicaoBotao += 30
                 self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212')
+
         self.statusMessage.destroy()
         self.statusMessage = Label(window, text=(f'  EDITAR'),anchor='w', background='#121212', font='arial 16', fg='yellow')
         self.statusMessage.place(height=20, width=900, x=0, y=50)
@@ -103,6 +107,7 @@ class App:
     def editarBotao(self,button_press):
         
         del self.lista[button_press]
+        self.quantidade -= 1
         self.adicionar()
             
         self.editar()
