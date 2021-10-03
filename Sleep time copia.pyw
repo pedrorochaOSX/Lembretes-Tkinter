@@ -4,7 +4,6 @@ from classLembrete import Lembrete
 from timeFunctions import getNTPTimeLocal
 from tkinter import *
 
-
 class App:
     def __init__(self):
 
@@ -24,40 +23,6 @@ class App:
             with open('textoLembretes.txt', 'w+') as arquivo:
                 arquivo.writelines('')
 
-                  
-
-        self.textEntry = Entry(window, font='arial 14', fg='white', bg='#24292e',bd=0)
-        self.textEntry.place(height=30, width=880, x=10, y=860)
-
-
-        self.status = self.quantidade
-
-        self.statusMessage = Label(window, text=(f'  LEMBRETES: {self.quantidade}'),anchor='w', background='#121212', font='arial 16', fg='white')
-        self.statusMessage.place(height=20, width=900, x=0, y=50)
-
-        self.botaoLembrete = []
-        
-               
-
-                
-        self.botaoAdicionar = Button(window, text="ADICIONAR", background='#24292e',bd=0, font='arial 12', fg='#ffffff', command=self.adicionar)
-        self.botaoAdicionar.place(height=30, width=225, x=0, y=0)
-        self.changeOnHover(self.botaoAdicionar, '#121212', '#24292e')
-
-        self.botaoEditar = Button(window, text="EDITAR", background='#24292e',bd=0, font='arial 12', fg='#ffffff', command=self.editar)
-        self.botaoEditar.place(height=30, width=225, x=225, y=0)
-        self.changeOnHover(self.botaoEditar, '#121212', '#24292e')
-
-        self.botaoExcluir = Button(window, text="EXCLUIR", background='#24292e',bd=0, font='arial 12', fg='#ffffff', command=self.excluir)
-        self.botaoExcluir.place(height=30, width=225, x=450, y=0)
-        self.changeOnHover(self.botaoExcluir, '#121212', '#24292e')
-
-        self.botaoLimpar = Button(window, text="LIMPAR", background='#24292e',bd=0, font='arial 12', fg='#ffffff', command=self.limpar)
-        self.botaoLimpar.place(height=30, width=225, x=675, y=0)
-        self.changeOnHover(self.botaoLimpar, '#121212', '#24292e')
-
-        self.botaoEscolhido = 'nada'
-
     def adicionar_lembrete(self, data: str, info: int):
             novoLembrete = Lembrete(data, info)
             self.lista.append(novoLembrete)    
@@ -67,21 +32,23 @@ class App:
         button.bind("<Leave>", func=lambda e: button.config(background=colorOnLeave))    
 
     def escolherBotao(self, button_press):
-        if (self.botaoEscolhido == self.botaoLembrete[button_press]):
+        self.botaoEscolhido = self.botaoLembrete[button_press]
+        if (self.botaoAntigo == self.botaoEscolhido):
             self.botaoEscolhido.config(fg='white',background='#121212')
             self.changeOnHover(self.botaoEscolhido, '#24292e', '#121212')
-                               
+            self.botaoAntigo = 'nada'
 
-        else:            
-            self.botaoAntigo = self.botaoEscolhido
-            self.botaoEscolhido = self.botaoLembrete[button_press]
+        else:    
             self.botaoEscolhido.config(fg='black',font='arial 15',background='white')
             self.changeOnHover(self.botaoEscolhido, '#24292e', 'white')
-            
-            self.textEntry.delete(0,END)
-            self.textEntry.insert(END,button_press)
-            self.botaoAntigo.config(fg='white',background='#121212')
-            self.changeOnHover(self.botaoAntigo, '#24292e', '#121212')
+            if (self.botaoAntigo != 'nada'):
+                self.botaoAntigo.config(fg='white',background='#121212')
+                self.changeOnHover(self.botaoAntigo, '#24292e', '#121212')
+                self.botaoAntigo = self.botaoEscolhido
+
+            else: 
+                self.botaoAntigo = self.botaoEscolhido    
+
             window.update()
 
     def adicionar(self):
@@ -105,50 +72,130 @@ class App:
 
             with open('textoLembretes.txt', 'w') as arquivo:
                 for i in self.lista:
-                    arquivo.writelines("%s\n" % i)   
+                    arquivo.writelines("%s\n" % i)
 
-            if (self.quantidade >= 0):
-                posicaoBotao = 80
-        
+            self.statusMessage.destroy()
+            self.statusMessage = Label(window, text=(f'  LEMBRETES: {self.quantidade}'),anchor='w', background='#121212', font='arial 16', fg='white')
+            self.statusMessage.place(height=20, width=900, x=0, y=50)          
+
+            for n in range(0,self.quantidade-1,1):
+                self.botaoLembrete[n].destroy()
+
+            self.Start()
+
+    def editar(self):
+        if (self.quantidade >= 0):
+            posicaoBotao = 80
+
             for n in range(0,self.quantidade,1):
                 i = self.lista[n]
                 
                 self.botaoLembrete.append('')
                 self.botaoLembrete[n] = Button(window, text=(f'  {i}'),anchor='w', background='#121212', font='arial 14', fg='white',bd=0, 
-                command=lambda m=n: self.escolherBotao(m))
+                command=lambda m=n: self.editarBotao(m))
                 self.botaoLembrete[n].place(height=30, width=900, x=0, y=posicaoBotao)
                 posicaoBotao += 30
                 self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212')
+        self.statusMessage.destroy()
+        self.statusMessage = Label(window, text=(f'  EDITAR'),anchor='w', background='#121212', font='arial 16', fg='yellow')
+        self.statusMessage.place(height=20, width=900, x=0, y=50)
 
-    def editar(self):
-        self.textEntry.insert(END, '3')
+    def editarBotao(self,button_press):
+        
+        del self.lista[button_press]
+        self.adicionar()
+            
+        self.editar()
 
     def excluir(self):
-        self.textEntry.insert(END, '4')
-
-    def limpar(self):
-        repetir = 1
-        while (repetir == 1):
-            os.system('cls')
-
-            self.lista.clear()
-            self.quantidade = 0
-            print('''LISTA LIMPA''')
-            with open('textoLembretes.txt', 'w') as arquivo:
-                for i in self.lista:
-                    arquivo.writelines("%s\n" % i)  
+        print(self.quantidadeAntiga)
+        if (self.quantidadeAntiga != 'nada'):
+            for n in range(0,self.quantidadeAntiga,1):
+                    self.botaoLembrete[n].destroy()
+        else:
+            for n in range(0,self.quantidade,1):
+                    self.botaoLembrete[n].destroy()
+        if (self.quantidade >= 0):
+            posicaoBotao = 80
 
             for n in range(0,self.quantidade,1):
                 i = self.lista[n]
                 
                 self.botaoLembrete.append('')
                 self.botaoLembrete[n] = Button(window, text=(f'  {i}'),anchor='w', background='#121212', font='arial 14', fg='white',bd=0, 
-                command=lambda m=n: self.escolherBotao(m))
+                command=lambda m=n: self.excluirBotao(m))
                 self.botaoLembrete[n].place(height=30, width=900, x=0, y=posicaoBotao)
                 posicaoBotao += 30
-                self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212')          
-        
-    def Start(self):   
+                self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212')
+                
+        self.botaoExcluir = Button(window, text="EXCLUIR", background='#24292e',bd=0, font='arial 12', fg='#ffffff', command=self.Start)
+        self.botaoExcluir.place(height=30, width=225, x=450, y=0)
+        self.changeOnHover(self.botaoExcluir, '#121212', '#24292e')
+                
+        self.statusMessage.destroy()
+        self.statusMessage = Label(window, text=(f'  EXCLUIR'),anchor='w', background='#121212', font='arial 16', fg='#c72344')
+        self.statusMessage.place(height=20, width=900, x=0, y=50)
+
+    def excluirBotao(self,button_press):
+        if (self.quantidade > 0):
+            del self.lista[button_press]
+            self.quantidadeAntiga = self.quantidade
+            self.quantidade -= 1
+            with open('textoLembretes.txt', 'w') as arquivo:
+                    for i in self.lista:
+                        arquivo.writelines("%s\n" % i)
+
+            self.excluir()
+
+    def limpar(self):
+        os.system('cls')
+
+        self.lista.clear()
+        self.quantidadeAntiga = self.quantidade
+        self.quantidade = 0
+        print('''LISTA LIMPA''')
+        with open('textoLembretes.txt', 'w') as arquivo:
+            for i in self.lista:
+                arquivo.writelines("%s\n" % i)  
+
+        self.statusMessage.destroy()
+        self.statusMessage = Label(window, text=(f'  LEMBRETES: {self.quantidade}'),anchor='w', background='#121212', font='arial 16', fg='white')
+        self.statusMessage.place(height=20, width=900, x=0, y=50)        
+
+        for n in range(0,self.quantidadeAntiga,1):
+            self.botaoLembrete[n].destroy()
+
+        self.Start()    
+
+    def Start(self):  
+        self.textEntry = Entry(window, font='arial 14', fg='white', bg='#24292e',bd=0)
+        self.textEntry.place(height=30, width=880, x=10, y=860)
+
+        self.statusMessage = Label(window, text=(f'  LEMBRETES: {self.quantidade}'),anchor='w', background='#121212', font='arial 16', fg='white')
+        self.statusMessage.place(height=20, width=900, x=0, y=50)
+
+        self.botaoLembrete = []
+                
+        self.botaoAdicionar = Button(window, text="ADICIONAR", background='#24292e',bd=0, font='arial 12', fg='#ffffff', command=self.adicionar)
+        self.botaoAdicionar.place(height=30, width=225, x=0, y=0)
+        self.changeOnHover(self.botaoAdicionar, '#121212', '#24292e')
+
+        self.botaoEditar = Button(window, text="EDITAR", background='#24292e',bd=0, font='arial 12', fg='#ffffff', command=self.editar)
+        self.botaoEditar.place(height=30, width=225, x=225, y=0)
+        self.changeOnHover(self.botaoEditar, '#121212', '#24292e')
+
+        self.botaoExcluir = Button(window, text="EXCLUIR", background='#24292e',bd=0, font='arial 12', fg='#ffffff', command=self.excluir)
+        self.botaoExcluir.place(height=30, width=225, x=450, y=0)
+        self.changeOnHover(self.botaoExcluir, '#121212', '#24292e')
+
+        self.botaoLimpar = Button(window, text="LIMPAR", background='#24292e',bd=0, font='arial 12', fg='#ffffff', command=self.limpar)
+        self.botaoLimpar.place(height=30, width=225, x=675, y=0)
+        self.changeOnHover(self.botaoLimpar, '#121212', '#24292e')
+
+        self.botaoEscolhido = 'nada'
+        self.botaoAntigo = 'nada'
+        self.quantidadeAntiga = 'nada'
+
         if (self.quantidade >= 1):
             posicaoBotao = 80
     
@@ -168,7 +215,7 @@ window.configure(background='#121212')
 window.resizable(width=False, height=False)
 window.minsize(width=900, height=900)
 
-App = App()
-App.Start()
+app = App()
+app.Start()
 
 window.mainloop()
