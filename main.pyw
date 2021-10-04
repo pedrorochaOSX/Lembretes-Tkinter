@@ -195,6 +195,7 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
                 arquivo.writelines("%s\n" % i)
 
         self.quantidade = 0
+        self.destruirBotoes()
         self.Start() 
 
     def destruirBotoes(self):       
