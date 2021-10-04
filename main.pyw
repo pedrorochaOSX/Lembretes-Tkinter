@@ -100,17 +100,45 @@ class App:
                 posicaoBotao += 30
                 self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212')
 
+        self.botaoEditar = Button(window, text="EDITAR", background='#24292e',bd=0, font='arial 12', fg='#ffffff', command=self.Start)
+        self.botaoEditar.place(height=30, width=225, x=225, y=0)
+        self.changeOnHover(self.botaoEditar, '#121212', '#24292e')        
+
         self.statusMessage.destroy()
         self.statusMessage = Label(window, text=(f'  EDITAR'),anchor='w', background='#121212', font='arial 16', fg='yellow')
         self.statusMessage.place(height=20, width=900, x=0, y=50)
 
     def editarBotao(self,button_press):
-        
-        del self.lista[button_press]
-        self.quantidade -= 1
-        self.adicionar()
-            
-        self.editar()
+        if (self.textEntry.get().strip() != ''):
+            del self.lista[button_press]
+            self.quantidade -= 1
+
+            if (self.textEntry.get().strip() != ''):
+                self.info = self.textEntry.get()
+                
+                data = getNTPTimeLocal()
+
+                self.adicionar_lembrete(data, self.info)
+                print(f'''
+LEMBRETE ADICIONADO: {self.lista[-1]}''')
+                self.quantidade += 1
+                
+                aux = 0
+
+                for i in range(0, self.quantidade-1, 1):
+                    aux = self.lista[i+1]
+                    self.lista[i+1] = self.lista[0]
+                    self.lista[0] = aux
+
+                self.textEntry.delete(0,END)        
+
+                with open('textoLembretes.txt', 'w') as arquivo:
+                    for i in self.lista:
+                        arquivo.writelines("%s\n" % i)
+
+            print(self.lista)            
+
+            self.editar()
 
     def excluir(self):
         print(self.quantidadeAntiga)
@@ -156,20 +184,16 @@ class App:
         os.system('cls')
 
         self.lista.clear()
-        self.quantidadeAntiga = self.quantidade
-        self.quantidade = 0
         print('''LISTA LIMPA''')
-        with open('textoLembretes.txt', 'w') as arquivo:
-            for i in self.lista:
-                arquivo.writelines("%s\n" % i)  
 
-        self.statusMessage.destroy()
-        self.statusMessage = Label(window, text=(f'  LEMBRETES: {self.quantidade}'),anchor='w', background='#121212', font='arial 16', fg='white')
-        self.statusMessage.place(height=20, width=900, x=0, y=50)        
-
-        for n in range(0,self.quantidadeAntiga,1):
+        for n in range(0, self.quantidade, 1):
             self.botaoLembrete[n].destroy()
 
+        with open('textoLembretes.txt', 'w') as arquivo:
+            for i in self.lista:
+                arquivo.writelines("%s\n" % i)
+
+        self.quantidade = 0
         self.Start()    
 
     def Start(self):  
