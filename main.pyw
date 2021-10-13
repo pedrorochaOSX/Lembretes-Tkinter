@@ -29,41 +29,112 @@ class App:
 
     def changeOnHover(self, button, colorOnHover, colorOnLeave):
         button.bind("<Enter>", func=lambda e: button.config(background=colorOnHover))
-        button.bind("<Leave>", func=lambda e: button.config(background=colorOnLeave))    
+        button.bind("<Leave>", func=lambda e: button.config(background=colorOnLeave))   
+
+    def Start(self):  
+        
+        self.textEntry = Text(root, font='arial 14', fg='white', bg='#24292e',bd=0,state=NORMAL,wrap='word',padx=20,pady=20)
+        scrollbar = Scrollbar(root,orient=VERTICAL,width=20)
+        scrollbar.config(command=self.textEntry.yview)
+        self.textEntry.config(yscrollcommand=scrollbar.set)
+        self.textEntry.place(height=400, width=440, x=10, y=85)
+        self.textEntry.focus_set()
+
+        self.statusMessage = Label(root, text=(f'  LEMBRETES: {self.quantidade}'),anchor='w', background='#121212', font='arial 16', fg='white')
+        self.statusMessage.place(height=20, width=900, x=0, y=525)
+
+        self.botaoLembrete = []
+                
+        self.botaoAdicionar = Button(root, text="Adicionar", background='#24292e',bd=0, font='arial 14', fg='#ffffff', command=self.adicionar)
+        self.botaoAdicionar.place(height=35, width=225, x=0, y=0)
+        self.changeOnHover(self.botaoAdicionar, '#2e3338', '#24292e')
+
+        self.botaoEditar = Button(root, text="Editar", background='#24292e',bd=0, font='arial 14', fg='#ffffff', command=self.editar)
+        self.botaoEditar.place(height=35, width=225, x=225, y=0)
+        self.changeOnHover(self.botaoEditar, '#2e3338', '#24292e')
+
+        self.botaoExcluir = Button(root, text="Excluir", background='#24292e',bd=0, font='arial 14', fg='#ffffff', command=self.excluir)
+        self.botaoExcluir.place(height=35, width=225, x=675, y=0)
+        self.changeOnHover(self.botaoExcluir, '#2e3338', '#24292e')
+
+        self.botaoLimpar = Button(root, text="Limpar", background='#24292e',bd=0, font='arial 14', fg='#ffffff', command=self.limpar)
+        self.botaoLimpar.place(height=35, width=225, x=450, y=0)
+        self.changeOnHover(self.botaoLimpar, '#2e3338', '#24292e')
+
+        self.botaoEscolhido = 'nada'
+        self.botaoAntigo = 'nada'
+        self.quantidadeAntiga = 'nada'
+
+        if (self.quantidade > 11):
+            self.canvas = Canvas(root,background='#121212',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*30))
+            scrollbar = Scrollbar(self.canvas,orient=VERTICAL)
+            scrollbar.pack(fill=Y,side=RIGHT)
+            scrollbar.config(command=self.canvas.yview)
+            self.canvas.config(yscrollcommand=scrollbar.set)
+
+        else:
+            self.canvas = Canvas(root,background='#121212',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*30))
+        
+        if (self.quantidade >= 1):
+            posicaoBotao = 0
+        
+            for n in range(0,self.quantidade,1):
+                i = self.lista[n]
+                
+                self.botaoLembrete.append('')
+                self.botaoLembrete[n] = Button(self.canvas, text=(f'  {i}'),anchor='w', background='#121212', font='arial 14', fg='white',bd=0,
+                command=lambda m=n: self.escolherBotao(m))
+                self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=883)
+                posicaoBotao += 30
+                self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212')
+
+            self.canvas.place(height=335,width=900,x=0,y=565)     
 
     def escolherBotao(self, button_press):
         self.botaoEscolhido = self.botaoLembrete[button_press]
-        self.textShow.config(state=NORMAL)
-        self.textShow.delete(1.0, END)
-        self.textShow.insert(END, self.lista[button_press])
-        self.textShow.config(state=DISABLED)
+
 
         if (self.botaoAntigo == self.botaoEscolhido):
             self.botaoEscolhido.config(font='arial 14',fg='white',background='#121212')
             self.changeOnHover(self.botaoEscolhido, '#24292e', '#121212')
             self.botaoAntigo = 'nada'
+            self.textShow.destroy()
 
         else:    
             self.botaoEscolhido.config(fg='black',font='arial 15',background='white')
             self.changeOnHover(self.botaoEscolhido, '#24292e', 'white')
+            
             if (self.botaoAntigo != 'nada'):
                 self.botaoAntigo.config(font='arial 14',fg='white',background='#121212')
                 self.changeOnHover(self.botaoAntigo, '#24292e', '#121212')
                 self.botaoAntigo = self.botaoEscolhido
+                
+                self.textShow.config(state=NORMAL)
+                self.textShow.delete(1.0, END)
+                self.textShow.insert(END, self.lista[button_press])
+                self.textShow.config(state=DISABLED)
 
             else: 
+                self.textShow = Text(root, font='arial 14', fg='white', bg='black',bd=0,state=NORMAL,wrap='word',padx=20,pady=20)
+                scrollbar = Scrollbar(root,orient=VERTICAL,width=20)
+                scrollbar.config(command=self.textShow.yview)
+                self.textShow.config(yscrollcommand=scrollbar.set)
+                self.textShow.place(height=400, width=430, x=460, y=85)
+                self.textShow.delete('1.0', END)
+                self.textShow.insert(END, self.lista[button_press])
+                self.textShow.config(state=DISABLED)
                 self.botaoAntigo = self.botaoEscolhido
 
-            window.update()
-
     def adicionar(self):
-        if (self.textEntry.get().strip() != ''):
-            self.info = self.textEntry.get()
+        if (self.textEntry.get('1.0','end-1c').strip() != ''):
+            self.info = self.textEntry.get('1.0',"end-1c")
+            self.info = self.info.replace('\n',' ')
+
             data = getNTPTimeLocal()
 
             self.adicionar_lembrete(data, self.info)
             print(f'''
-    LEMBRETE ADICIONADO: {self.lista[-1]}''')
+LEMBRETE ADICIONADO: {self.lista[-1]}''')
             self.quantidade += 1
             
             aux = 0
@@ -73,132 +144,151 @@ class App:
                 self.lista[i+1] = self.lista[0]
                 self.lista[0] = aux
 
-            self.textEntry.delete(0,END)        
-
             with open('textoLembretes.txt', 'w') as arquivo:
                 for i in self.lista:
                     arquivo.writelines("%s\n" % i)
 
-            self.statusMessage.destroy()
-            self.statusMessage = Label(window, text=(f'  LEMBRETES: {self.quantidade}'),anchor='w', background='#121212', font='arial 16', fg='white')
-            self.statusMessage.place(height=20, width=900, x=0, y=85)          
+            self.botaoAntigo = 'nada' 
 
-            for n in range(0,self.quantidade-1,1):
-                self.botaoLembrete[n].destroy()
+            try:
+                self.textShow.destroy()
 
-            self.botaoAdicionar.destroy()
-            self.botaoEditar.destroy()
-            self.botaoExcluir.destroy()
-            self.botaoLimpar.destroy()
-            self.textEntry.destroy()
-            self.textShow.destroy()
+            except AttributeError:
+                print('No textShow') 
+                
+            self.textEntry.delete('1.0', END)          
 
-            self.Start()
+            self.restart_botaoEditar()
+            self.restart_botaoExcluir()
+            self.restart_canvas()
+            self.restart_statusMessage()
 
     def editar(self):
-        self.textShow.config(state=NORMAL)
-        self.textShow.delete(1.0, END)
-        self.textShow.config(state=DISABLED)
-        for n in range(0,self.quantidade,1):
-            self.botaoLembrete[n].destroy()
+        self.botaoAntigo = 'nada'
 
-        if (self.quantidade >= 0):
-            posicaoBotao = 120
+        try:
+            self.textShow.destroy()
 
+        except AttributeError:
+            print('No textShow')    
+
+        self.textEntry.delete('1.0',END)
+
+        self.restart_botaoExcluir()
+        self.restart_statusMessage()
+
+        self.botaoEditar.destroy()
+        self.botaoEditar = Button(root, text="Editar", background='#121212',bd=0, font='arial 14', fg='#ffffff', 
+        command=lambda:[self.restart_statusMessage(), self.restart_botaoEditar(),self.restart_canvas()])
+        self.botaoEditar.place(height=35, width=225, x=225, y=0)
+        self.changeOnHover(self.botaoEditar, '#191919', '#121212') 
+
+        self.botaoLembrete = []
+        self.canvas.destroy()
+        if (self.quantidade > 11):
+            self.canvas = Canvas(root,background='#121212',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*30))
+            scrollbar = Scrollbar(self.canvas,orient=VERTICAL)
+            scrollbar.pack(fill=Y,side=RIGHT)
+            scrollbar.config(command=self.canvas.yview)
+            self.canvas.config(yscrollcommand=scrollbar.set)
+
+        else:
+            self.canvas = Canvas(root,background='#121212',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*30))
+        
+        if (self.quantidade >= 1):
+            posicaoBotao = 0
+        
             for n in range(0,self.quantidade,1):
                 i = self.lista[n]
                 
                 self.botaoLembrete.append('')
-                self.botaoLembrete[n] = Button(window, text=(f'  {i}'),anchor='w', background='#121212', font='arial 14', fg='white',bd=0, 
+                self.botaoLembrete[n] = Button(self.canvas, text=(f'  {i}'),anchor='w', background='#121212', font='arial 14', fg='white',bd=0,
                 command=lambda m=n: self.editarBotao(m))
-                self.botaoLembrete[n].place(height=30, width=900, x=0, y=posicaoBotao)
+                self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=883)
                 posicaoBotao += 30
                 self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212')
 
-        self.botaoExcluir.destroy()
-        self.botaoExcluir = Button(window, text="Excluir", background='#24292e',bd=0, font='arial 14', fg='#ffffff', command=self.excluir)
-        self.botaoExcluir.place(height=35, width=225, x=450, y=0)
-        self.changeOnHover(self.botaoExcluir, '#2e3338', '#24292e')
-
-        self.botaoEditar.destroy()
-        self.botaoEditar = Button(window, text="Editar", background='#121212',bd=0, font='arial 14', fg='#ffffff', 
-        command=lambda:[self.destruirBotoes(), self.Start()])
-        self.botaoEditar.place(height=35, width=225, x=225, y=0)
-        self.changeOnHover(self.botaoEditar, '#191919', '#121212')   
-
-        self.statusMessage.destroy()
-        self.statusMessage = Label(window, text=(f'  LEMBRETES: {self.quantidade}'),anchor='w', background='#121212', font='arial 16', fg='white')
-        self.statusMessage.place(height=20, width=900, x=0, y=85)     
+            self.canvas.place(height=335,width=900,x=0,y=565)  
 
     def editarBotao(self,button_press):
-        if (self.textEntry.get().strip() != ''):
+        if (self.textEntry.get('1.0','end-1c').strip() != ''):
             del self.lista[button_press]
             self.quantidade -= 1
+        
+            self.info = self.textEntry.get('1.0', 'end-1c')
+            
+            self.info = self.info.replace('\n',' ')
+            
+            data = getNTPTimeLocal()
 
-            if (self.textEntry.get().strip() != ''):
-                self.info = self.textEntry.get()
-                
-                data = getNTPTimeLocal()
-
-                self.adicionar_lembrete(data, self.info)
-                print(f'''
+            self.adicionar_lembrete(data, self.info)
+            print(f'''
 LEMBRETE ADICIONADO: {self.lista[-1]}''')
-                self.quantidade += 1
-                
-                aux = 0
+            self.quantidade += 1
+            
+            aux = 0
 
-                for i in range(0, self.quantidade-1, 1):
-                    aux = self.lista[i+1]
-                    self.lista[i+1] = self.lista[0]
-                    self.lista[0] = aux
+            for i in range(0, self.quantidade-1, 1):
+                aux = self.lista[i+1]
+                self.lista[i+1] = self.lista[0]
+                self.lista[0] = aux
 
-                self.textEntry.delete(0,END)        
-
-                with open('textoLembretes.txt', 'w') as arquivo:
-                    for i in self.lista:
-                        arquivo.writelines("%s\n" % i)
+            with open('textoLembretes.txt', 'w') as arquivo:
+                for i in self.lista:
+                    arquivo.writelines("%s\n" % i)
 
             print(self.lista)            
 
             self.editar()
 
     def excluir(self):
-        self.textShow.config(state=NORMAL)
-        self.textShow.delete(1.0, END)
-        self.textShow.config(state=DISABLED)        
-        if (self.quantidadeAntiga != 'nada'):
-            for n in range(0,self.quantidadeAntiga,1):
-                    self.botaoLembrete[n].destroy()
-        else:
-            for n in range(0,self.quantidade,1):
-                    self.botaoLembrete[n].destroy()
-        if (self.quantidade >= 0):
-            posicaoBotao = 120
+        self.restart_botaoEditar()
 
+        self.botaoAntigo = 'nada'
+
+        try:
+            self.textShow.destroy()
+
+        except AttributeError:
+            print('No textShow')
+
+        self.textEntry.delete(1.0,END)
+
+        self.restart_botaoEditar()
+        self.restart_statusMessage()
+       
+        self.botaoExcluir.destroy()        
+        self.botaoExcluir = Button(root, text="Excluir", background='#121212',bd=0, font='arial 14', fg='#ffffff',
+        command=lambda:[self.restart_statusMessage(), self.restart_botaoExcluir(),self.restart_canvas()])
+        self.botaoExcluir.place(height=35, width=225, x=675, y=0)
+        self.changeOnHover(self.botaoExcluir, '#191919', '#121212')
+
+        self.botaoLembrete = []
+        self.canvas.destroy()
+        if (self.quantidade > 11):
+            self.canvas = Canvas(root,background='#121212',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*30))
+            scrollbar = Scrollbar(self.canvas,orient=VERTICAL)
+            scrollbar.pack(fill=Y,side=RIGHT)
+            scrollbar.config(command=self.canvas.yview)
+            self.canvas.config(yscrollcommand=scrollbar.set)
+
+        else:
+            self.canvas = Canvas(root,background='#121212',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*30))
+        
+        if (self.quantidade >= 1):
+            posicaoBotao = 0
+        
             for n in range(0,self.quantidade,1):
                 i = self.lista[n]
                 
                 self.botaoLembrete.append('')
-                self.botaoLembrete[n] = Button(window, text=(f'  {i}'),anchor='w', background='#121212', font='arial 14', fg='white',bd=0, 
+                self.botaoLembrete[n] = Button(self.canvas, text=(f'  {i}'),anchor='w', background='#121212', font='arial 14', fg='white',bd=0,
                 command=lambda m=n: self.excluirBotao(m))
-                self.botaoLembrete[n].place(height=30, width=900, x=0, y=posicaoBotao)
+                self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=883)
                 posicaoBotao += 30
                 self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212')
-        
-        self.botaoEditar.destroy()
-        self.botaoEditar = Button(window, text="Editar", background='#24292e',bd=0, font='arial 14', fg='#ffffff', command=self.editar)
-        self.botaoEditar.place(height=35, width=225, x=225, y=0)
-        self.changeOnHover(self.botaoEditar, '#2e3338', '#24292e')
-        
-        self.botaoExcluir.destroy()        
-        self.botaoExcluir = Button(window, text="Excluir", background='#121212',bd=0, font='arial 14', fg='#ffffff',
-         command=lambda:[self.destruirBotoes(), self.Start()])
-        self.botaoExcluir.place(height=35, width=225, x=450, y=0)
-        self.changeOnHover(self.botaoExcluir, '#191919', '#121212')
 
-        self.statusMessage.destroy()
-        self.statusMessage = Label(window, text=(f'  LEMBRETES: {self.quantidade}'),anchor='w', background='#121212', font='arial 16', fg='white')
-        self.statusMessage.place(height=20, width=900, x=0, y=85)
+            self.canvas.place(height=335,width=900,x=0,y=565)
                 
     def excluirBotao(self,button_press):
         if (self.quantidade > 0):
@@ -216,84 +306,76 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
         self.lista.clear()
         print('''LISTA LIMPA''')
 
-        self.destruirBotoes()
-
         with open('textoLembretes.txt', 'w') as arquivo:
             for i in self.lista:
                 arquivo.writelines("%s\n" % i)
 
         self.quantidade = 0
+
+        try:
+            self.textShow.destroy()
+
+        except AttributeError:
+            print('No textShow')
         
-        self.destruirBotoes()
-        self.Start() 
+        self.restart_canvas()
+        self.restart_botaoEditar()
+        self.restart_botaoExcluir()
+        self.restart_statusMessage()
 
-    def destruirBotoes(self):       
-        if (self.quantidade >= 1 ):    
-            for n in range(0, self.quantidade, 1):
-                self.botaoLembrete[n].destroy()
+    def restart_statusMessage(self): 
+        self.statusMessage.destroy()   
+        self.statusMessage = Label(root, text=(f'  LEMBRETES: {self.quantidade}'),anchor='w', background='#121212', font='arial 16', fg='white')
+        self.statusMessage.place(height=20, width=900, x=0, y=525)
 
-        self.botaoExcluir.destroy()
-        self.botaoAdicionar.destroy() 
-        self.botaoEditar.destroy()  
-        self.botaoLimpar.destroy() 
-        self.statusMessage.destroy() 
-        self.textEntry.destroy() 
-        self.textShow.destroy()  
-
-    def Start(self):  
-        self.textEntry = Entry(window, font='arial 14', fg='white', bg='#24292e',bd=0)
-        self.textEntry.place(height=30, width=880, x=10, y=45)
-        self.textEntry.focus_set()
-
-        self.textShow = Text(window, font='arial 14', fg='white', bg='black',bd=0,state=DISABLED,wrap='word')
-        self.textShow.place(height=90, width=880, x=10, y=800)
-
-        self.statusMessage = Label(window, text=(f'  LEMBRETES: {self.quantidade}'),anchor='w', background='#121212', font='arial 16', fg='white')
-        self.statusMessage.place(height=20, width=900, x=0, y=85)
-
-        self.botaoLembrete = []
-                
-        self.botaoAdicionar = Button(window, text="Adicionar", background='#24292e',bd=0, font='arial 14', fg='#ffffff', command=self.adicionar)
-        self.botaoAdicionar.place(height=35, width=225, x=0, y=0)
-        self.changeOnHover(self.botaoAdicionar, '#2e3338', '#24292e')
-
-        self.botaoEditar = Button(window, text="Editar", background='#24292e',bd=0, font='arial 14', fg='#ffffff', command=self.editar)
+    def restart_botaoEditar(self):
+        self.botaoEditar.destroy()
+        self.botaoEditar = Button(root, text="Editar", background='#24292e',bd=0, font='arial 14', fg='#ffffff', command=self.editar)
         self.botaoEditar.place(height=35, width=225, x=225, y=0)
         self.changeOnHover(self.botaoEditar, '#2e3338', '#24292e')
 
-        self.botaoExcluir = Button(window, text="Excluir", background='#24292e',bd=0, font='arial 14', fg='#ffffff', command=self.excluir)
-        self.botaoExcluir.place(height=35, width=225, x=450, y=0)
+    def restart_botaoExcluir(self):
+        self.botaoExcluir.destroy()
+        self.botaoExcluir = Button(root, text="Excluir", background='#24292e',bd=0, font='arial 14', fg='#ffffff', command=self.excluir)
+        self.botaoExcluir.place(height=35, width=225, x=675, y=0)
         self.changeOnHover(self.botaoExcluir, '#2e3338', '#24292e')
 
-        self.botaoLimpar = Button(window, text="Limpar", background='#24292e',bd=0, font='arial 14', fg='#ffffff', command=self.limpar)
-        self.botaoLimpar.place(height=35, width=225, x=675, y=0)
-        self.changeOnHover(self.botaoLimpar, '#2e3338', '#24292e')
+    def restart_canvas(self):    
+        self.canvas.destroy()
+        self.botaoLembrete = []
 
-        self.botaoEscolhido = 'nada'
-        self.botaoAntigo = 'nada'
-        self.quantidadeAntiga = 'nada'
+        if (self.quantidade > 11):
+            self.canvas = Canvas(root,background='#121212',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*30))
+            scrollbar = Scrollbar(self.canvas,orient=VERTICAL)
+            scrollbar.pack(fill=Y,side=RIGHT)
+            scrollbar.config(command=self.canvas.yview)
+            self.canvas.config(yscrollcommand=scrollbar.set)
 
-
-        if (self.quantidade >= 1):
-            posicaoBotao = 120
+        else:
+            self.canvas = Canvas(root,background='#121212',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*30))
         
-        for n in range(0,self.quantidade,1):
-            i = self.lista[n]
-            
-            self.botaoLembrete.append('')
-            self.botaoLembrete[n] = Button(window, text=(f'  {i}'),anchor='w', background='#121212', font='arial 14', fg='white',bd=0, 
-            command=lambda m=n: self.escolherBotao(m))
-            self.botaoLembrete[n].place(height=30, width=900, x=0, y=posicaoBotao)
-            posicaoBotao += 30
-            self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212') 
+        if (self.quantidade >= 1):
+            posicaoBotao = 0
+        
+            for n in range(0,self.quantidade,1):
+                i = self.lista[n]
 
-window = Tk()
-window.title('Lembretes')
-window.configure(background='#121212')
-window.resizable(width=False, height=False)
-window.minsize(width=900, height=900)
+                self.botaoLembrete.append('')
+                self.botaoLembrete[n] = Button(self.canvas, text=(f'  {i}'),anchor='w', background='#121212', font='arial 14', fg='white',bd=0,
+                command=lambda m=n: self.escolherBotao(m))
+                self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=883)
+                posicaoBotao += 30
+                self.changeOnHover(self.botaoLembrete[n], '#24292e', '#121212')
+
+            self.canvas.place(height=335,width=900,x=0,y=565)
+
+root = Tk()
+root.title('Lembretes')
+root.configure(background='#121212')
+root.resizable(width=False, height=False)
+root.minsize(width=900, height=900)
 
 app = App()
 app.Start()
 
-window.mainloop()
+root.mainloop()
