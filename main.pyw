@@ -63,8 +63,8 @@ class App:
         self.botaoAntigo = 'nada'
         self.quantidadeAntiga = 'nada'
 
-        if (self.quantidade > 3):
-            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0, 0,self.quantidade*70))
+        if (self.quantidade > 5):
+            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0, 0,self.quantidade*42))
             scrollbar = Scrollbar(self.canvas,orient=VERTICAL,width=20)
             scrollbar.pack(fill=Y,side=RIGHT)
             scrollbar.config(command=self.canvas.yview)
@@ -78,14 +78,14 @@ class App:
                 self.botaoLembrete.append('')
                 self.botaoLembrete[n] = Button(self.canvas, text=(f'  {i}'),anchor='w', background='#333333', font='arial 14', fg='#eeeeee',bd=0,
                 command=lambda m=n: self.escolherBotao(m))
-                self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=580,height=60)
-                posicaoBotao += 70
+                self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=580,height=37)
+                posicaoBotao += 42
                 self.changeOnHover(self.botaoLembrete[n], '#414141', '#333333')
 
             self.canvas.place(height=210,width=600,x=0,y=390)    
 
         else:
-            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*70))
+            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*42))
         
             if (self.quantidade >= 1):
                 posicaoBotao = 0
@@ -96,8 +96,8 @@ class App:
                     self.botaoLembrete.append('')
                     self.botaoLembrete[n] = Button(self.canvas, text=(f'  {i}'),anchor='w', background='#333333', font='arial 14', fg='#eeeeee',bd=0,
                     command=lambda m=n: self.escolherBotao(m))
-                    self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=600,height=60)
-                    posicaoBotao += 70
+                    self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=600,height=37)
+                    posicaoBotao += 42
                     self.changeOnHover(self.botaoLembrete[n], '#414141', '#333333')
 
                 self.canvas.place(height=210,width=600,x=0,y=390)   
@@ -201,8 +201,8 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
         self.botaoLembrete = []
         self.canvas.destroy()
 
-        if (self.quantidade > 3):
-            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*70))
+        if (self.quantidade > 5):
+            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*42))
             scrollbar = Scrollbar(self.canvas,orient=VERTICAL,width=20)
             scrollbar.pack(fill=Y,side=RIGHT)
             scrollbar.config(command=self.canvas.yview)
@@ -216,14 +216,14 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
                 self.botaoLembrete.append('')
                 self.botaoLembrete[n] = Button(self.canvas, text=(f'  {i}'),anchor='w', background='#333333', font='arial 14', fg='#eeeeee',bd=0,
                 command=lambda m=n: self.editarBotao(m))
-                self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=580,height=60)
-                posicaoBotao += 70
+                self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=580,height=37)
+                posicaoBotao += 42
                 self.changeOnHover(self.botaoLembrete[n], '#414141', '#333333')
 
             self.canvas.place(height=210,width=600,x=0,y=390)
 
         else:
-            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*70))
+            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*42))
         
             if (self.quantidade >= 1):
                 posicaoBotao = 0
@@ -234,8 +234,8 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
                     self.botaoLembrete.append('')
                     self.botaoLembrete[n] = Button(self.canvas, text=(f'  {i}'),anchor='w', background='#333333', font='arial 14', fg='#eeeeee',bd=0,
                     command=lambda m=n: self.editarBotao(m))
-                    self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=600,height=60)
-                    posicaoBotao += 70
+                    self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=600,height=37)
+                    posicaoBotao += 42
                     self.changeOnHover(self.botaoLembrete[n], '#414141', '#333333')
 
                 self.canvas.place(height=210,width=600,x=0,y=390)  
@@ -296,8 +296,8 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
         self.botaoLembrete = []
         self.canvas.destroy()
 
-        if (self.quantidade > 3):
-            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*70))
+        if (self.quantidade > 5):
+            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*42))
             scrollbar = Scrollbar(self.canvas,orient=VERTICAL,width=20)
             scrollbar.pack(fill=Y,side=RIGHT)
             scrollbar.config(command=self.canvas.yview)
@@ -311,14 +311,14 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
                 self.botaoLembrete.append('')
                 self.botaoLembrete[n] = Button(self.canvas, text=(f'  {i}'),anchor='w', background='#333333', font='arial 14', fg='#eeeeee',bd=0,
                 command=lambda m=n: self.excluirBotao(m))
-                self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=580,height=60)
-                posicaoBotao += 70
+                self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=580,height=37)
+                posicaoBotao += 42
                 self.changeOnHover(self.botaoLembrete[n], '#414141', '#333333')
 
             self.canvas.place(height=210,width=600,x=0,y=390)    
 
         else:
-            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*70))
+            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*42))
         
             if (self.quantidade >= 1):
                 posicaoBotao = 0
@@ -329,8 +329,8 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
                     self.botaoLembrete.append('')
                     self.botaoLembrete[n] = Button(self.canvas, text=(f'  {i}'),anchor='w', background='#333333', font='arial 14', fg='#eeeeee',bd=0,
                     command=lambda m=n: self.excluirBotao(m))
-                    self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=600,height=60)
-                    posicaoBotao += 70
+                    self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=600,height=37)
+                    posicaoBotao += 42
                     self.changeOnHover(self.botaoLembrete[n], '#414141', '#333333')
 
                 self.canvas.place(height=210,width=600,x=0,y=390)
@@ -389,8 +389,8 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
         self.canvas.destroy()
         self.botaoLembrete = []
 
-        if (self.quantidade > 3):
-            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*70))
+        if (self.quantidade > 5):
+            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*42))
             scrollbar = Scrollbar(self.canvas,orient=VERTICAL,width=20)
             scrollbar.pack(fill=Y,side=RIGHT)
             scrollbar.config(command=self.canvas.yview)
@@ -404,14 +404,14 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
                 self.botaoLembrete.append('')
                 self.botaoLembrete[n] = Button(self.canvas, text=(f'  {i}'),anchor='w', background='#333333', font='arial 14', fg='#eeeeee',bd=0,
                 command=lambda m=n: self.escolherBotao(m))
-                self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=580,height=60)
-                posicaoBotao += 70
+                self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=580,height=37)
+                posicaoBotao += 42
                 self.changeOnHover(self.botaoLembrete[n], '#414141', '#333333')
 
             self.canvas.place(height=210,width=600,x=0,y=390)    
 
         else:
-            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*70))
+            self.canvas = Canvas(root,background='#202020',highlightthickness=0, scrollregion=(0,0,0,self.quantidade*42))
         
             if (self.quantidade >= 1):
                 posicaoBotao = 0
@@ -422,8 +422,8 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
                     self.botaoLembrete.append('')
                     self.botaoLembrete[n] = Button(self.canvas, text=(f'  {i}'),anchor='w', background='#333333', font='arial 14', fg='#eeeeee',bd=0,
                     command=lambda m=n: self.escolherBotao(m))
-                    self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=600,height=60)
-                    posicaoBotao += 70
+                    self.canvas.create_window((0, posicaoBotao), window=self.botaoLembrete[n], anchor=N+W,width=600,height=37)
+                    posicaoBotao += 42
                     self.changeOnHover(self.botaoLembrete[n], '#414141', '#333333')
 
             self.canvas.place(height=210,width=600,x=0,y=390)
@@ -433,6 +433,7 @@ root.title('Lembretes')
 root.configure(background='#202020')
 root.resizable(width=False, height=False)
 root.minsize(width=600, height=600)
+root.iconbitmap('Lembretes-tk.ico')
 
 app = App()
 app.Start()
