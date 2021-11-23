@@ -1,7 +1,6 @@
 import os
-import time
 from classLembrete import Lembrete
-from timeFunctions import getNTPTimeLocal
+from timeFunctions import getTime
 from tkinter import *
 
 class App:
@@ -145,7 +144,7 @@ class App:
             self.info = self.textEntry.get('1.0',"end-1c")
             self.info = self.info.replace('\n','   ')
 
-            data = getNTPTimeLocal()
+            data = getTime()
 
             self.adicionar_lembrete(data, self.info)
             print(f'''
@@ -249,7 +248,7 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
             
             self.info = self.info.replace('\n','   ')
             
-            data = getNTPTimeLocal()
+            data = getTime()
 
             self.adicionar_lembrete(data, self.info)
             print(f'''
