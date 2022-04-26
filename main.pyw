@@ -30,31 +30,31 @@ class App:
         button.bind("<Leave>", func=lambda e: button.config(background=colorOnLeave))   
     
     def Start(self):  
-        self.textEntry = Text(root, font='arial 13', fg='#dfdfdf', bg='#333333',bd=0,state=NORMAL,wrap='word',padx=20,pady=20,insertbackground= '#dfdfdf')
+        self.textEntry = Text(root, font='arial 14', fg='#dfdfdf', bg='#333333',bd=0,state=NORMAL,wrap='word',padx=20,pady=20,insertbackground= '#dfdfdf')
         scrollbar = Scrollbar(root,orient=VERTICAL,width=20)
         scrollbar.config(command=self.textEntry.yview)
         self.textEntry.config(yscrollcommand=scrollbar.set)
-        self.textEntry.place(height=300, width=280, x=15, y=75)
+        self.textEntry.place(height=300, width=280, x=15, y=50)
         self.textEntry.focus_set()
 
         self.statusMessage = Label(root, text=(f'  Lembretes: {self.quantidade}'),anchor='w', background='#202020', font='arial 16 bold', fg='white')
-        self.statusMessage.place(height=20, width=600, x=0, y=45)
+        self.statusMessage.place(height=20, width=600, x=0, y=365)
 
         self.botaoLembrete = []
                 
-        self.botaoAdicionar = Button(root, text="Adicionar", background='#202020',bd=0, font='arial 14', fg='#909090', command=self.adicionar)
+        self.botaoAdicionar = Button(root, text="Adicionar", background='#202020',bd=0, font='arial 14', fg='#ffffff', command=self.adicionar)
         self.botaoAdicionar.place(height=35, width=150, x=0, y=0)
         self.changeOnHover(self.botaoAdicionar, '#2f2f2f', '#202020')
 
-        self.botaoEditar = Button(root, text="Editar", background='#202020',bd=0, font='arial 14', fg='#909090', command=self.editar)
+        self.botaoEditar = Button(root, text="Editar", background='#202020',bd=0, font='arial 14', fg='#ffffff', command=self.editar)
         self.botaoEditar.place(height=35, width=150, x=150, y=0)
         self.changeOnHover(self.botaoEditar, '#2f2f2f', '#202020')
 
-        self.botaoExcluir = Button(root, text="Excluir", background='#202020',bd=0, font='arial 14', fg='#909090', command=self.excluir)
+        self.botaoExcluir = Button(root, text="Excluir", background='#202020',bd=0, font='arial 14', fg='#ffffff', command=self.excluir)
         self.botaoExcluir.place(height=35, width=150, x=450, y=0)
         self.changeOnHover(self.botaoExcluir, '#2f2f2f', '#202020')
 
-        self.botaoLimpar = Button(root, text="Limpar", background='#202020',bd=0, font='arial 14', fg='#909090', command=self.limpar)
+        self.botaoLimpar = Button(root, text="Limpar", background='#202020',bd=0, font='arial 14', fg='#ffffff', command=self.limpar)
         self.botaoLimpar.place(height=35, width=150, x=300, y=0)
         self.changeOnHover(self.botaoLimpar, '#2f2f2f', '#202020')
 
@@ -128,11 +128,11 @@ class App:
                 self.textShow.config(state=DISABLED)
 
             else: 
-                self.textShow = Text(root, font='arial 13', fg='white', bg='black',bd=0,state=NORMAL,wrap='word',padx=20,pady=20)
+                self.textShow = Text(root, font='arial 14', fg='white', bg='black',bd=0,state=NORMAL,wrap='word',padx=20,pady=20)
                 scrollbar = Scrollbar(root,orient=VERTICAL,width=20)
                 scrollbar.config(command=self.textShow.yview)
                 self.textShow.config(yscrollcommand=scrollbar.set)
-                self.textShow.place(height=300, width=280, x=305, y=75)
+                self.textShow.place(height=300, width=280, x=305, y=50)
                 self.textShow.delete('1.0', END)
                 self.textShow.insert(END, str(self.lista[button_press]).replace('   ','\n'))
                 self.textShow.config(state=DISABLED)
@@ -192,7 +192,7 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
         self.restart_statusMessage()
 
         self.botaoEditar.destroy()
-        self.botaoEditar = Button(root, text="Editar", background='#202020',bd=0, font='arial 14', fg='white', 
+        self.botaoEditar = Button(root, text="Editar", background='#202020',bd=0, font='arial 14', fg='#909090', 
         command=lambda:[self.restart_statusMessage(), self.restart_botaoEditar(),self.restart_canvas()])
         self.botaoEditar.place(height=35, width=150, x=150, y=0)
         self.changeOnHover(self.botaoEditar, '#2f2f2f', '#202020') 
@@ -287,7 +287,7 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
         self.restart_statusMessage()
        
         self.botaoExcluir.destroy()        
-        self.botaoExcluir = Button(root, text="Excluir", background='#202020',bd=0, font='arial 14', fg='white',
+        self.botaoExcluir = Button(root, text="Excluir", background='#202020',bd=0, font='arial 14', fg='#909090',
         command=lambda:[self.restart_statusMessage(), self.restart_botaoExcluir(),self.restart_canvas()])
         self.botaoExcluir.place(height=35, width=150, x=450, y=0)
         self.changeOnHover(self.botaoExcluir, '#2f2f2f', '#202020')
@@ -347,40 +347,74 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
     def limpar(self):
         os.system('cls')
 
+        self.clearConfirmBackground = Frame(root, background='#202020')
+        self.clearConfirmBackground.place(height=600, width=600, x=0, y=0)
+
+        self.clearConfirmationText = Label(root, text='LIMPAR TUDO?',anchor='c', background='#202020', font='arial 18', fg='white')
+        self.clearConfirmationText.place(height=20, width=600, x=0, y=200)
+
+        self.botaoClearConfirm = Button(root, text="SIM", background='#2f2f2f',bd=0, font='arial 16', fg='#ffffff', command=self.clearConfirm)
+        self.botaoClearConfirm.place(height=100, width=150, x=135, y=250)
+
+        self.botaoClearCancel = Button(root, text="CANCELAR", background='#2f2f2f',bd=0, font='arial 16', fg='#ffffff', command=self.clearCancel)
+        self.botaoClearCancel.place(height=100, width=150, x=315, y=250)
+
+    def clearConfirm(self):
         self.lista.clear()
         print('''LISTA LIMPA''')
-
         with open('textoLembretes.txt', 'w') as arquivo:
             for i in self.lista:
                 arquivo.writelines("%s\n" % i)
-
         self.quantidade = 0
+        try:
+            self.textShow.destroy()
+        except AttributeError:
+            print('No textShow')
+        self.clearConfirmBackground.destroy()
+        self.clearConfirmationText.destroy()
+        self.botaoClearConfirm.destroy()
+        self.botaoClearCancel.destroy()
+        self.restart_botaoEditar()
+        self.restart_botaoExcluir()
+
+        self.restart_botaoEditar()
+        self.restart_botaoExcluir()
+        self.restart_canvas()
+        self.restart_statusMessage()
+        
+    def clearCancel(self):
+        self.clearConfirmBackground.destroy()
+        self.clearConfirmationText.destroy()
+        self.botaoClearConfirm.destroy()
+        self.botaoClearCancel.destroy()
+        self.restart_botaoEditar()
+        self.restart_botaoExcluir()
 
         try:
             self.textShow.destroy()
-
+            self.botaoAntigo = 'nada'
         except AttributeError:
-            print('No textShow')
-        
-        self.restart_canvas()
+            self.botaoAntigo = 'nada'
+
         self.restart_botaoEditar()
         self.restart_botaoExcluir()
+        self.restart_canvas()
         self.restart_statusMessage()
-
+        
     def restart_statusMessage(self): 
         self.statusMessage.destroy()   
         self.statusMessage = Label(root, text=(f'  Lembretes: {self.quantidade}'),anchor='w', background='#202020', font='arial 16 bold', fg='white')
-        self.statusMessage.place(height=20, width=600, x=0, y=45)
+        self.statusMessage.place(height=20, width=600, x=0, y=365)
 
     def restart_botaoEditar(self):
         self.botaoEditar.destroy()
-        self.botaoEditar = Button(root, text="Editar", background='#202020',bd=0, font='arial 14', fg='#909090', command=self.editar)
+        self.botaoEditar = Button(root, text="Editar", background='#202020',bd=0, font='arial 14', fg='white', command=self.editar)
         self.botaoEditar.place(height=35, width=150, x=150, y=0)
         self.changeOnHover(self.botaoEditar, '#2f2f2f', '#202020')
 
     def restart_botaoExcluir(self):
         self.botaoExcluir.destroy()
-        self.botaoExcluir = Button(root, text="Excluir", background='#202020',bd=0, font='arial 14', fg='#909090', command=self.excluir)
+        self.botaoExcluir = Button(root, text="Excluir", background='#202020',bd=0, font='arial 14', fg='white', command=self.excluir)
         self.botaoExcluir.place(height=35, width=150, x=450, y=0)
         self.changeOnHover(self.botaoExcluir, '#2f2f2f', '#202020')
 

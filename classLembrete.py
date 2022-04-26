@@ -17,4 +17,4 @@ class Lembrete:
         
 
     def __repr__(self):
-        return f'{self.data}  |  {self.info}'
+        return f'{self.data}      {self.info}'
