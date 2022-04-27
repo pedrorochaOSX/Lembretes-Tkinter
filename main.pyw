@@ -345,8 +345,6 @@ LEMBRETE ADICIONADO: {self.lista[-1]}''')
             self.excluir()
 
     def limpar(self):
-        os.system('cls')
-
         self.clearConfirmBackground = Frame(root, background='#202020')
         self.clearConfirmBackground.place(height=600, width=600, x=0, y=0)
 
